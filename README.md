@@ -111,6 +111,12 @@ curl http://localhost:8000/health
 curl "http://localhost:8000/ask?q=Explain%20private%20AI%20in%20one%20sentence"
 ```
 
+Open the browser demo after creating the SSH tunnel:
+
+```text
+http://localhost:8000/demo
+```
+
 To test Ollama directly through a tunnel:
 
 ```bash

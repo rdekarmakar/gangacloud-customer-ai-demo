@@ -1,13 +1,15 @@
 import os
+from pathlib import Path
 from typing import Any
 
 import requests
 from fastapi import FastAPI, Query
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, Field
 from requests import RequestException
 
 
+BASE_DIR = Path(__file__).resolve().parent
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:0.5b")
 OLLAMA_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_TIMEOUT_SECONDS", "45"))
@@ -137,8 +139,14 @@ def root() -> dict[str, Any]:
             "ask_post": "POST /ask",
             "ask_get": "GET /ask?q=...",
             "models": "GET /models",
+            "demo": "GET /demo",
         },
     }
+
+
+@app.get("/demo", include_in_schema=False)
+def demo_page() -> FileResponse:
+    return FileResponse(BASE_DIR / "static" / "index.html")
 
 
 @app.post("/ask", response_model=AskResponse)
